@@ -277,9 +277,10 @@ object Evolutions {
           case ex: SQLException => ex.getMessage + " [ERROR:" + ex.getErrorCode + ", SQLSTATE:" + ex.getSQLState + "]"
           case ex => ex.getMessage
         }
-        if (!autocommit) {
-          Play.logger.error(message)
 
+        Play.logger.error(message)
+
+        if (!autocommit) {
           connection.rollback();
 
           val humanScript = "# --- Rev:" + lastScript.evolution.revision + "," + (if (lastScript.isInstanceOf[UpScript]) "Ups" else "Downs") + " - " + lastScript.evolution.hash + "\n\n" + (if (lastScript.isInstanceOf[UpScript]) lastScript.evolution.sql_up else lastScript.evolution.sql_down);
